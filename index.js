@@ -4,6 +4,7 @@ import send from 'send';
 const port = 3000;
 const app = express();
 
+app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // Middlewear
