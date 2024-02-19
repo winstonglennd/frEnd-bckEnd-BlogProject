@@ -1,0 +1,43 @@
+<%- include("./edit.ejs") %>
+
+    <div class="hidden background-darkener">
+        <div id="upload-form" class="overlay">
+            <div class="form-content">
+                <h2>Edit Post</h2>
+                <form action="/update-post" method="POST" autocomplete="off" id="upload-form-real">
+                    <input type="hidden" name="postIndex" value="<%= postIndex %>">
+                    <label for="title_content">Title:</label><br>
+                    <input type="text" id="title" name="title_content" maxlength="45"
+                        value="<%= postToEdit.title_content %>"> <br>
+                    <label for="blog_content">Your Content:</label> <br>
+                    <textarea id="content" name="blog_content" cols="30" rows="10" class="content-input"
+                        style="resize: none;"><%= postToEdit.blog_content %></textarea> <br>
+                    <div class="upload-buttons">
+                        <input type="submit" value="Save Changes" id="post-btn" class="button">
+                        <button type="button" id="cancel-post-btn" class="button">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        (async () => {
+            const content = document.querySelector(".background-darkener");
+
+            content.classList.remove("hidden");
+            await new Promise(r => setTimeout(r, 20));
+            content.classList.add("opacity-100");
+
+        })()
+
+        document.querySelector("#cancel-post-btn").addEventListener("click", async function () {
+            const content = document.querySelector(".background-darkener");
+            content.classList.remove("opacity-100");
+            await new Promise(r => setTimeout(r, 200));
+            content.classList.add("hidden");
+        })
+
+    </script>

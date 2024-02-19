@@ -1,0 +1,108 @@
+<%- include("./partials/header.ejs") %>
+
+    <form action="/read-more-post" method="POST" id="readMoreForm">
+        <% if(posts.length===0) { %>
+            <h2 id="empty-message">Feeds Still Empty ✨</h2>
+            <% } else { %>
+
+                <div class="post-container">
+                    <h2 class="recent-title">Recent Posts</h2>
+                    <% posts.forEach((post, index)=> { %>
+                        <div class="blog-content">
+                            <h3>
+                                <%= post.title_content %>
+                            </h3>
+                            <p>
+                                <%= post.blog_content %>
+                            </p>
+                            <button type="button" class="button read-more-btn" data-index=<%=index %> >Read
+                                More</button>
+                        </div>
+                        <% }); %>
+                            <% } %>
+                </div>
+
+    </form>
+    <div class="hidden background-darkener">
+        <div id="upload-form" class="overlay">
+            <div class="form-content">
+                <h2>Create a Post!</h2>
+                <form action="/upload" method="POST" autocomplete="off" id="upload-form-real">
+                    <label for="title_content">Title:</label><br>
+                    <input type="text" name="title_content" class="title-input" maxlength="45" required> <br>
+                    <label for="blog_content">Your Content:</label> <br>
+                    <textarea name="blog_content" cols="30" rows="10" class="content-input" style="resize: none;"
+                        required></textarea> <br>
+                    <div class="upload-buttons">
+                        <input type="submit" value="Post" id="post-btn" class="button">
+                        <button type="button" id="cancel-post-btn" class="button">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="create-post-btn" id="createPostBtn"></div>
+
+    <script>
+
+        const crtPostBtn = document.getElementById("createPostBtn");
+        document.querySelector(".create-post-btn").addEventListener("click", async function () {
+            const content = document.querySelector(".background-darkener");
+            content.classList.remove("hidden");
+            crtPostBtn.classList.add("hidden");
+
+            await new Promise(r => setTimeout(r, 0));
+            content.classList.add("opacity-100");
+
+        })
+
+        document.querySelector("#cancel-post-btn").addEventListener("click", async function () {
+            const content = document.querySelector(".background-darkener");
+            crtPostBtn.classList.remove("hidden");
+            content.classList.remove("opacity-100");
+            await new Promise(r => setTimeout(r, 200));
+            content.classList.add("hidden");
+        })
+
+        //Searching function
+        const blogContents = document.querySelectorAll('.blog-content');
+
+        // Add event listener to the search bar input
+        document.querySelectorAll('.searchBar').forEach(searchbar => {
+            searchbar.addEventListener('input', function () {
+                const searchTerm = this.value.trim().toLowerCase(); // Get search term and convert to lowercase
+
+                // Loop through each blog content
+                blogContents.forEach(blogContent => {
+                    const title = blogContent.querySelector('h3').textContent.trim().toLowerCase(); // Get title and convert to lowercase
+                    const content = blogContent.querySelector('p').textContent.trim().toLowerCase(); // Get content and convert to lowercase
+
+                    // Check if title or content contains the search term
+                    if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                        blogContent.style.display = 'flex'; // Show the blog content
+                    } else {
+                        blogContent.style.display = 'none'; // Hide the blog content
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.read-more-btn').forEach(readMoreBtn => {
+            readMoreBtn.addEventListener('click', function () {
+                const index = this.dataset.index;
+                const input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "postIndex");
+                input.setAttribute("value", index);
+
+                const readMoreForm = document.querySelector("#readMoreForm");
+                readMoreForm.appendChild(input);
+                readMoreForm.submit();
+            })
+        })
+
+    </script>

@@ -1,0 +1,72 @@
+<%- include("./partials/header.ejs") %>
+
+    <form id="editForm" action="/edit-post" method="POST">
+        <% if(posts.length===0) { %>
+            <h2 id="empty-message">Feeds Still Empty ✨</h2>
+            <% } else { %>
+
+                <div class="post-container">
+                    <h2 class="recent-title">Edit Posts</h2>
+                    <% posts.forEach((post, index)=> { %>
+                        <div class="blog-content">
+                            <h3>
+                                <%= post.title_content %>
+                            </h3>
+                            <p>
+                                <%= post.blog_content %>
+                            </p>
+                            <button type="button" class="button edit-btn" data-index="<%= index %>">Edit</button>
+                        </div>
+                        <% }); %>
+                            <% } %>
+                </div>
+    </form>
+
+    <script>
+
+        document.querySelectorAll(".edit-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const index = this.dataset.index;
+                const input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "postIndex");
+                input.setAttribute("value", index);
+
+                const editForm = document.querySelector("#editForm");
+                editForm.appendChild(input);
+                editForm.submit();
+            });
+            
+        });
+        //Searching funtion
+        const blogContent = document.querySelectorAll(".blog-content");
+
+        document.querySelector(".searchBar").addEventListener('input', function() {
+            const searchTerm = this.value.trim().toLowerCase();
+            
+            blogContent.forEach(blogContent => {
+                const title = blogContent.querySelector("h3").textContent.trim().toLowerCase();
+                const content = blogContent.querySelector("p").textContent.trim().toLowerCase();
+
+                if(title.includes(searchTerm) || content.includes(searchTerm)) {
+                    blogContent.style.display = 'flex';
+                }
+                else {
+                    blogContent.style.display = 'none';
+                }
+            });
+        });
+
+        // simpler syntax, using jQuery
+
+                // $('.edit-btn').click(function () {
+        //     var index = $(this).data('index');
+        //     $('<input>').attr({
+        //         type: 'hidden',
+        //         name: 'postIndex',
+        //         value: index,
+        //     }).appendTo('#editForm');
+        //     $('#editForm').submit();
+        // })
+
+    </script>
