@@ -16,7 +16,7 @@ var posts = [];
 
 // Url Handler
 app.get("/", (req, res) => {
-    res.render("index.ejs", {posts});
+    res.render("index", {posts});
 })
 
 app.post("/upload", (req, res) => {
@@ -33,11 +33,11 @@ app.post("/upload", (req, res) => {
 app.post("/read-more-post", (req, res) => {
     const postIndex = req.body.postIndex;
     const post = posts[postIndex];
-    res.render('read-more.ejs', {post});
+    res.render('read-more', {post});
 })
 
 app.get("/edit", (req, res) => {
-    res.render("edit.ejs", {posts});
+    res.render("edit", {posts});
 })
 
 app.post("/edit-post", (req, res) => {
@@ -51,7 +51,7 @@ app.post("/update-post", (req, res) => {
     const {title_content, blog_content} = req.body;
     posts[postIndex].title_content = title_content;
     posts[postIndex].blog_content = blog_content;
-    res.render("edit.ejs", {posts});
+    res.render("edit", {posts});
 })
 
 app.get("/delete", (req, res) => {
